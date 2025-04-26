@@ -25,6 +25,15 @@ module top(
   wire in_ready;
   wire [63:0] in_data;
   Conv::data_vector kernel;
+  DataGenerator data_generator(
+    .clk(clk),
+    .rstn(rstn),
+    .next_test(next_test),
+    .valid(in_valid),
+    .ready(in_ready),
+    .in_data(in_data),
+    .kernel(kernel)
+  );
 
   wire [127:0] result;
   wire out_ready;
@@ -46,7 +55,7 @@ module top(
   reg [127:0] result_reg;
   always@(posedge clk or negedge rstn)begin
     if(~rstn) result_reg <= 128'b0;
-    else if (out_valid & out_ready) result_reg <= result;
+    else if(out_valid & out_ready) result_reg <= result;
   end
 
   wire [31:0] data [3:0];
